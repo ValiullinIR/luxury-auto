@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="/add_new_model" method="POST" class="forms_style" >
+    <h3 align="center"> Добавить модель </h3>
+        <input type="text" placeholder="Название" name="name" class="forms_item">
+        <br> <input type="text" placeholder="Возможные цвета" name="possible_colors"class="forms_item">
+        <br> <input type="datetime-local" placeholder="Release year" name="release_year" class="forms_item">
+        <br>
+        <select class="forms_item" name="brand_id">
+            {% for brand in brands %}
+            <option value= {{ brand.id_brand }}> {{ brand.name }} </option>
+            {% endfor %}
+        </select>
+    <br> <input type="submit" class="btn btn-success" value="Добавить" style="margin-left:177px">
+</form>
+<form action="/Add_new_brand" method="POST" class="forms_style" >
+    <h3 align="center"> Добавить марку </h3>
+    <input type="text" placeholder="Название" name="name" class="forms_item">
+    <br> <input type="text" placeholder="Страна производитель" name="manufacturer-country"class="forms_item">
+    <br> <input type="submit" class="btn btn-success" value="Добавить" style="margin-left:177px">
+</form>
+<form action="/Add_new_car" method="POST" class="forms_style" enctype="multipart/form-data">
+    <h3 align="center"> Добавить машину</h3>
+    <input type="text" placeholder="Цвет" name="color" class="forms_item">
+    <br> <input type="number" placeholder="Мощность" name="power"class="forms_item">
+    <br> <input type="text" placeholder="Кузов" name="car_body"class="forms_item">
+    <br> <input type="text" placeholder="Комплектация" name="equipment"class="forms_item">
+    <br> <input type="number" placeholder="Цена" name="price"class="forms_item">
+    <br> <input type="file" placeholder="Фото" accept="image/*" name="photo"class="forms_item">
+    <br> <input type="datetime-local" placeholder="Дата поступления" name="release_year" class="forms_item">
+    <br> В наличии <input type="checkbox" name="availability" class="forms_item"><br>
+           <select class="forms_item" name="id_model">
+            {% for model in models %}
+            <option value= {{ model.id_model }}> {{ model.name }} </option>
+            {% endfor %}
+        </select>
+    <br> <input type="submit" class="btn btn-success" value="Добавить" style="margin-left:177px">
+</form>
+<form action="/add_new_client" method="POST" class="forms_style" >
+    <h3 align="center"> Добавить клиента</h3>
+    <input type="text" placeholder="Имя" name="name" class="forms_item">
+    <br> <input type="text" placeholder="Фамилия" name="surname" class="forms_item">
+    <br> <input type="text" placeholder="Отчество" name="patronymic" class="forms_item">
+    <br> <input type="tel" placeholder="Номер телефона" name="phone" maxlength="11"  pattern="+7[0-9]{10}" class="forms_item">
+    <br> <input type="submit" class="btn btn-success" value="Добавить" style="margin-left:177px">
+</form>
+{% endblock %}
+

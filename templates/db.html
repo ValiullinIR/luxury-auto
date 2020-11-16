@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+table {border: 1px solid grey;}
+th {border: 1px solid grey;}
+td {border: 1px solid grey;}
+</style>
+<body>
+
+<h3>Таблица Brand</h3>
+<table >
+    <tr><th>id_brand</th><th>name</th><th>manufacturer_country</th></tr>
+    {% for brand in brands %}
+    <tr><td>{{ brand.id_brand }}</td> <td> {{ brand.name }} </td> <td>{{ brand.manufacturer_country }}</td></tr>
+    {% endfor %}
+</table>
+<br>
+<h3>Таблица Models</h3>
+<table >
+    <tr><th>id_model</th><th>name</th><th>possible_color</th> <th>release_year</th> <th>brand_id</th></tr>
+    {% for model in models %}
+    <tr><td>{{ model.id_model }}</td> <td> {{ model.name }} </td> <td>{{ model.possible_color }}</td> <td>{{ model.release_year }}</td> <td>{{ model.brand_id }}</td></tr>
+    {% endfor %}
+</table>
+<br>
+<h3>Таблица Cars</h3>
+<table >
+    <tr><th>id_car</th><th>name</th><th>color</th> <th>release_year</th> <th>power</th> <th>car_body</th> <th>price</th><th>equipment</th><th>photo</th> <th>availability</th> <th>order_id</th><th>model_id</th></tr>
+    {% for car in cars %}
+    <tr><td>{{ car.id_car }}</td> <td> {{ car.name }} </td> <td>{{ car.color }}</td> <td>{{ car.release_year }}</td> <td>{{ car.power }}</td> <td>{{ car.car_body }}</td> <td>{{ car.price }}</td> <td>{{ car.equipment }}</td> <td></td> <td>{{ car.availability }}</td> <td>{{ car.order_id }}</td> <td>{{ car.model_id }}</td>  </tr>
+    {% endfor %}
+</table>
+
+<br>
+<h3>Таблица Client</h3>
+<table >
+    <tr><th>id</th><th>name</th><th>surname</th> <th>patronymic</th> <th>phone</th></tr>
+    {% for client in clients %}
+    <tr><td>{{ client.id }}</td> <td> {{ client.name }} </td> <td>{{ client.surname }}</td> <td>{{ client.patronymic }}</td> <td>{{ client.phone }}</td>  </tr>
+    {% endfor %}
+</table>
+<br>
+<h3>Таблица Order</h3>
+<table  >
+    <tr><th>id_order</th><th>sum</th><th>data_time</th> <th>client_id</th></tr>
+    {% for order in orders %}
+    <tr><td>{{ order.id_order }}</td> <td> {{ order.sum }} </td> <td>{{ order.data_time }}</td> <td>{{ order.client_id }}</td> </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
