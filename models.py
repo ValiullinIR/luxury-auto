@@ -1,11 +1,14 @@
 from app import db
 from datetime import datetime
 
+orders_cars = db.Table('orders_cars',
+                       db.Column('order_id', db.Integer, db.ForeignKey('order.id_order'), primary_key=True),
+                       db.Column('car_id', db.Integer, db.ForeignKey('car.id_car'), primary_key=True)
+                       )
 
-
-#Модель - клиент
+# Модель - клиент
 class Client(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     surname = db.Column(db.String(32))
     name = db.Column(db.String(32))
     patronymic = db.Column(db.String(32))
@@ -22,24 +25,31 @@ class Client(db.Model):
             'phone': self.phone
         }
 
-#Модель - заказ
+
+# Модель - заказ
 class Order(db.Model):
     id_order = db.Column(db.Integer, primary_key=True)
     sum = db.Column(db.Integer)
     data_time = db.Column(db.DateTime, default=datetime.utcnow)
-    client_id = db.Column(db.Integer ,db.ForeignKey('client.id'), nullable=False)
-    cars = db.relationship('Car', backref='order', lazy=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
+    cars = db.relationship('Car', secondary=orders_cars,  lazy='subquery',
+                           backref=db.backref('cars', lazy=True))
 
     @property
     def serialize(self):
+        cars_list = []
+        for car in self.cars:
+            cars_list.append(car.id_car)
         return {
             'id_order': self.id_order,
             'sum': self.sum,
             'data_time': datetime.__str__(self.data_time),
-            'client_id': self.client_id
+            'client_id': self.client_id,
+            "cars": cars_list
         }
 
-#Модель - марка
+
+# Модель - марка
 class Brand(db.Model):
     id_brand = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16))
@@ -54,7 +64,8 @@ class Brand(db.Model):
             'manufacturer_country': self.manufacturer_country
         }
 
-#Модель - модель
+
+# Модель - модель
 class Model(db.Model):
     id_model = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16))
@@ -69,12 +80,12 @@ class Model(db.Model):
             'id_model': self.id_model,
             'name': self.name,
             'possible_color': self.possible_color,
-            'release_year': datetime.__str__ (self.release_year),
+            'release_year': datetime.__str__(self.release_year),
             'brand_id': self.brand_id
         }
 
 
-#Модель - авто
+# Модель - авто
 class Car(db.Model):
     id_car = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
@@ -86,7 +97,8 @@ class Car(db.Model):
     equipment = db.Column(db.String(32))
     photo = db.Column(db.Text)
     availability = db.Column(db.Boolean)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id_order'))
+    orders = db.relationship('Order', secondary=orders_cars, lazy='subquery',
+                             backref=db.backref('orders', lazy=True))
     model_id = db.Column(db.Integer, db.ForeignKey('model.id_model'), nullable=False)
 
     @property
@@ -102,7 +114,6 @@ class Car(db.Model):
             'equipment': self.equipment,
             #'photo': self.photo,
             'availability': self.availability,
-            'order_id': self.order_id,
             'model_id': self.model_id
         }
 

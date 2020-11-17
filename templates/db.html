@@ -51,5 +51,15 @@ td {border: 1px solid grey;}
     <tr><td>{{ order.id_order }}</td> <td> {{ order.sum }} </td> <td>{{ order.data_time }}</td> <td>{{ order.client_id }}</td> </tr>
     {% endfor %}
 </table>
+
+<h3>Таблица Orders-cars</h3>
+<table >
+    <tr><th>order_id</th><th>car_id</th></tr>
+    {% for order in orders %}
+    {% for order_car in order.cars %}
+    <tr><td>{{ order.id_order }}</td> <td> {{ order_car.id_car }} </td></td></tr>
+    {% endfor %}
+    {% endfor %}
+</table>
 </body>
 </html>

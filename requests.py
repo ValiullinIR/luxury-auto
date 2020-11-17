@@ -15,7 +15,7 @@ def Add_model():
         name = json.get('name')
         colors = json.get('possible_colors')
         data = json.get('release_year')
-        data += "-11-11T00:00"
+        data += "-01-01T00:00"
         data = datetime.strptime(data, '%Y-%m-%dT%H:%M')
         brand_id = int(json.get('brand_id'))
         brand = Brand.query.filter_by(id_brand=brand_id).first()
@@ -42,7 +42,7 @@ def Models(model_id):
             model.possible_color = colors
         data = json.get('release_year')
         if data != None:
-            data += "-11-11T00:00"
+            data += "-01-01T00:00"
             data = datetime.strptime(data, '%Y-%m-%dT%H:%M')
             model.release_year = data
         brand_id = json.get('brand_id')
@@ -118,17 +118,14 @@ def Cars():
         photo = json.get('photo')
         price = int(json.get('price'))
         availability = bool(json.get('availability'))
-        order_id = json.get('order_id')
-        release_year = json.get('release_year')
+        release_year =str(json.get('release_year'))
         release_year += "-01-01T00:00"
         release_year = datetime.strptime(release_year, '%Y-%m-%dT%H:%M')
-        if order_id != None:
-            order_id = int(order_id)
         model_id = int(json.get('model_id'))
         model = Model.query.filter_by(id_model=model_id).first()
         brand = Brand.query.filter_by(id_brand=model.brand_id).first()
         name = brand.name + " " + model.name
-        car = Car(name=name,color=color, price=price, power=power, car_body=car_body, equipment=equipment, photo=photo, order_id=order_id,
+        car = Car(name=name,color=color, price=price, power=power, car_body=car_body, equipment=equipment, photo=photo,
                   model_id=model_id, release_year=release_year, availability=availability)
         try:
             db.session.add(car)
@@ -166,9 +163,6 @@ def Cars_update(id_car):
         availability = bool(json.get('availability'))
         if availability != None:
             car.availability = availability
-        order_id = json.get('order_id')
-        if order_id != None:
-            car.order_id = int(order_id)
         model_id = json.get('model_id')
         if model_id != None:
             model = Model.query.filter_by(id_model=model_id).first()
@@ -252,9 +246,11 @@ def Orders():
         sum = int(json.get('sum'))
         data_time = datetime.strptime(json.get('data_time'), '%Y-%m-%dT%H:%M')
         client_id = json.get('client_id')
-
+        cars_list = list(json.get('cars_list'))
         order = Order(sum=sum, data_time=data_time, client_id=client_id)
-
+        for i in cars_list:
+            car = Car.query.filter_by(id_car=i).first()
+            order.cars.append(car)
         try:
             db.session.add(order)
             db.session.commit()
@@ -280,6 +276,13 @@ def Order_update(order_id):
         client_id = json.get('client_id')
         if client_id != None:
             order.client_id = int(client_id)
+        cars_list = json.get('cars_list')
+        if cars_list != None:
+            for car in order.cars:
+                order.cars.remove(car)
+            for i in cars_list:
+                car = Car.query.filter_by(id_car=i).first()
+                order.cars.append(car)
         try:
             db.session.commit()
             return 'Данные успешно обновлены!', 200

@@ -4,7 +4,7 @@ from flask_restful import Resource, reqparse, request
 from datetime import datetime
 import base64
 
-from models import Model, Car, Brand, Client, Order
+from models import Model, Car, Brand, Client, Order, orders_cars
 import requests
 
 @app.route('/')
