@@ -112,7 +112,7 @@ class Car(db.Model):
             'car_body': self.car_body,
             'price': self.price,
             'equipment': self.equipment,
-            #'photo': self.photo,
+            'photo': self.photo,
             'availability': self.availability,
             'model_id': self.model_id
         }
