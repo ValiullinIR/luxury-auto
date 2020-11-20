@@ -103,6 +103,8 @@ class Car(db.Model):
 
     @property
     def serialize(self):
+        model = Model.query.filter_by(id_model=self.model_id).first()
+        name = model.name
         return {
             'id_car': self.id_car,
             'name': self.name,
@@ -114,6 +116,7 @@ class Car(db.Model):
             'equipment': self.equipment,
             'photo': self.photo,
             'availability': self.availability,
-            'model_id': self.model_id
+            'model_id': self.model_id,
+            'model_name': name
         }
 

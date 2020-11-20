@@ -324,3 +324,38 @@ def Models_of_one_year(year):
         year = datetime.strptime(year, '%Y-%m-%dT%H:%M')
         models = Model.query.filter_by(release_year=year)
         return jsonify(models_list=[i.serialize for i in models])
+    
+class CarsKeyWords(object):
+    car_id = -1
+    key_words_count = 0
+
+    def __init__(self, car_id, key_words_count):
+        self.car_id=car_id
+        self.key_words_count=key_words_count
+
+    def __lt__(self, other):
+        return self.key_words_count >= other.key_words_count
+    
+@app.route('/search/<string:param>', methods=['GET'])
+def Search(param):
+    key_words = param.split('_')
+    cars_list = []
+    cars_key_word_list = []
+    cars = Car.query.all()
+    for car in cars:
+        key_words_count = 0
+        name_words = car.name.split(' ')
+        for name_word in name_words:
+            for key_word in key_words:
+                if key_word == name_word:
+                    key_words_count += 1
+        if key_words_count != 0:
+            cars_key_word_list.append(CarsKeyWords(car.id_car, key_words_count))
+
+    cars_key_word_list.sort()
+    for car_key_word in cars_key_word_list:
+        car = Car.query.filter_by(id_car=car_key_word.car_id).first()
+        cars_list.append(car)
+
+    return jsonify(cars_list=[i.serialize for i in cars_list])
+
