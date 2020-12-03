@@ -76,12 +76,14 @@ class Model(db.Model):
 
     @property
     def serialize(self):
+        brand = Brand.query.filter_by(id_brand=self.brand_id).first()
         return {
             'id_model': self.id_model,
             'name': self.name,
             'possible_color': self.possible_color,
             'release_year': datetime.__str__(self.release_year),
-            'brand_id': self.brand_id
+            'brand_id': self.brand_id,
+            'brand_name': brand.name
         }
 
 
