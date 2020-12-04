@@ -61,6 +61,11 @@ def Models(model_id):
         except:
             return 'Ошибка удаления данных!', 500
 
+@app.route('/brands/<int:id>', methods=['GET'])
+def Models_by_brand(id):
+    if request.method == 'GET':
+        models = Model.query.filter_by(brand_id=id)
+        return jsonify([i.serialize for i in models])
 
 @app.route('/brands', methods=['POST', 'GET'])
 def Add_brand():
