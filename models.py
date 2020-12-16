@@ -46,7 +46,7 @@ class Order(db.Model):
             'sum': self.sum,
             'data_time': datetime.__str__(self.data_time),
             'client_id': self.client_id,
-            "cars": cars_list
+            "cars_list": cars_list
         }
 
 
