@@ -39,7 +39,8 @@ class Order(db.Model):
     def serialize(self):
         cars_list = []
         for car in self.cars:
-            cars_list.append(car.id_car)
+            cars_list = [i.serialize for i in self.cars]
+            #cars_list.append(car.id_car)
         return {
             'id_order': self.id_order,
             'sum': self.sum,

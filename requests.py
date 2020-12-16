@@ -266,7 +266,7 @@ def Orders():
         orders = Order.query.all()
         return jsonify(orders_list=[i.serialize for i in orders])
 
-@app.route('/orders/<int:order_id>', methods=['PUT', 'DELETE'])
+@app.route('/orders/<int:order_id>', methods=['PUT', 'DELETE', 'GET'])
 def Order_update(order_id):
     if request.method == 'PUT':
         order = Order.query.filter_by(id_order=order_id).first()
@@ -295,12 +295,16 @@ def Order_update(order_id):
             return 'Ошибка обновления данных!', 500
 
     elif request.method == 'DELETE':
-        Order.query.filter_by(id_order=order_id).delete()
+        Order.query.filter_by(id_order=order_id).first().delete()
         try:
             db.session.commit()
             return 'Запись успешно удалена', 200
         except:
             return 'Ошибка удаления данных!', 500
+
+    elif request.method == 'GET':
+        order = Order.query.filter_by(id_order=order_id).first()
+        return jsonify(order.serialize)
 
 @app.route('/orders_of_one_client/<int:client_id>', methods=['GET'])
 def Orders_of_one_client(client_id):
