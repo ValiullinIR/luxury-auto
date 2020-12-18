@@ -175,8 +175,9 @@ def Cars_update(id_car):
             name = brand.name + " " + model.name
             car.name = name
             car.model_id = int(model_id)
-        release_year = str(json.get('release_year'))
+        release_year = json.get('release_year')
         if release_year != None:
+            release_year = str(release_year)
             release_year += "-01-01T00:00"
             release_year = datetime.strptime(release_year, '%Y-%m-%dT%H:%M')
             car.release_year = release_year
